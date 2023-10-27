@@ -1,0 +1,27 @@
+body {
+    font-family: Arial, sans-serif;
+    background-color: #f0f0f0;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    height: 100vh;
+    margin: 0;
+}
+
+/* Estilos para el contenido de lencería */
+#registroCompras,
+#otrasCompras {
+    background-color: #000;
+    color: #fff;
+    padding: 10px;
+    margin: 0;
+}
+
+button,
+label,
+select,
+input {
+    display: block;
+    margin: 10px;
+}
