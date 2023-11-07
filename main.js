@@ -1,80 +1,83 @@
 
 
-let lenceria = {
-    tallas: ["XS", "S", "M", "L", "XL"],
-    descripcion: "Lencería de encaje",
-    color: "Negro",
-    seleccionadas: [],
-    cantidadCompradas: {},
+// Obtén referencias a los botones en el documento HTML
+const botonMostrarLenceria1 = document.getElementById("botonMostrarLenceria1");
+const botonMostrarLenceria2 = document.getElementById("botonMostrarLenceria2");
 
-    mostrarCompras() {
-        const otrasComprasDiv = document.querySelector("#otrasCompras");
-        otrasComprasDiv.innerHTML = '';
-        const ul = document.createElement("ul");
-        for (let talla in lenceria.cantidadCompradas) {
-            const li = document.createElement("li");
-            li.textContent = `Talla ${talla}: ${lenceria.cantidadCompradas[talla]}`;
-            ul.appendChild(li);
-        }
-        otrasComprasDiv.appendChild(ul);
-    },
+// Funciones para mostrar mensajes relacionados con la lencería
+function mostrarLenceria1() {
+    alert("¡Hermosa lencería de encaje para ocasiones especiales!");
+}
 
-    guardarSeleccion() {
-        // Convertir la selección de lencería a JSON y guardarla en localStorage
-        const seleccionJSON = JSON.stringify(lenceria.seleccionadas);
-        localStorage.setItem("seleccionLenceria", seleccionJSON);
-    },
+function mostrarLenceria2() {
+    alert("Descubre nuestra colección de lencería sexy y elegante.");
+}
 
-    cargarSeleccion() {
-        // Recuperar la selección de lencería desde localStorage y convertirla de nuevo a un arreglo
-        const seleccionGuardada = localStorage.getItem("seleccionLenceria");
-        if (seleccionGuardada) {
-            lenceria.seleccionadas = JSON.parse(seleccionGuardada);
-        }
+// Agregar manejadores de eventos a los botones
+botonMostrarLenceria1.addEventListener("click", mostrarLenceria1);
+botonMostrarLenceria2.addEventListener("click", mostrarLenceria2);
+// Obtén una referencia al elemento select en el documento HTML
+const selectTalla = document.getElementById("tallaSeleccionada");
+
+// Agregar un manejador de eventos al select para mostrar un mensaje
+selectTalla.addEventListener("change", function () {
+    const seleccion = selectTalla.value;
+    let mensaje = "";
+
+    switch (seleccion) {
+        case "XS":
+            mensaje = "Has seleccionado talla XS, perfecta para la comodidad.";
+            break;
+        case "S":
+            mensaje = "Has seleccionado talla S, ideal para un ajuste cómodo.";
+            break;
+        case "M":
+            mensaje = "Has seleccionado talla M, para un ajuste regular.";
+            break;
+        case "L":
+            mensaje = "Has seleccionado talla L, para un ajuste más holgado.";
+            break;
+        case "XL":
+            mensaje = "Has seleccionado talla XL, para un ajuste amplio y cómodo.";
+            break;
+        default:
+            mensaje = "Selecciona una talla de lencería";
     }
-};
 
-function simuladorLenceria() {
-    const tallaSeleccionada = document.querySelector("#tallaSeleccionada");
-    const tallaBuscada = document.querySelector("#tallaBuscada");
-    const restablecerSeleccion = document.querySelector("#restablecerSeleccion");
-    const mostrarComprasButton = document.querySelector("#mostrarCompras");
+    alert(mensaje);
+});
+// Obtén una referencia a elementos en el documento HTML
+const inputTallaComprada = document.getElementById("tallaComprada");
+const registroComprasDiv = document.getElementById("registroCompras");
+const restablecerCompraButton = document.getElementById("restablecerCompra");
 
-    // Cargar la selección de lencería almacenada al cargar la página
-    lenceria.cargarSeleccion();
+// Almacena las compras realizadas
+const comprasRealizadas = [];
 
-    // Evento de cambio para el select de talla de lencería
-    tallaSeleccionada.addEventListener("change", function () {
-        const selectedTalla = tallaSeleccionada.value;
-        if (lenceria.tallas.includes(selectedTalla)) {
-            lenceria.seleccionadas.push(selectedTalla);
-            if (lenceria.cantidadCompradas[selectedTalla]) {
-                lenceria.cantidadCompradas[selectedTalla]++;
-            } else {
-                lenceria.cantidadCompradas[selectedTalla] = 1;
-            }
-            // Guardar la selección de lencería
-            lenceria.guardarSeleccion();
+// Agregar un manejador de eventos para comprar la talla cuando se presiona "Enter"
+inputTallaComprada.addEventListener("keyup", function(event) {
+    if (event.key === "Enter") {
+        const tallaComprada = inputTallaComprada.value.trim();
+
+        if (tallaComprada === "") {
+            alert("Por favor, ingresa una talla para comprar.");
         } else {
-            alert("Lo sentimos, la talla de lencería seleccionada no está disponible en este momento.");
+            comprasRealizadas.push(tallaComprada);
+            mostrarComprasEnRegistro();
+            inputTallaComprada.value = ""; // Limpiar el campo de entrada
         }
-    });
-
-    // Evento de entrada de teclado para buscar una talla de lencería
-    tallaBuscada.addEventListener("keyup", function (event) {
-        const searchedTalla = tallaBuscada.value;
-        if (event.key === "Enter") {
-            const foundTalla = lenceria.tallas.find(talla => talla === searchedTalla);
-            if (foundTalla) {
-                alert(`¡Buena noticia! Tenemos la talla de lencería ${foundTalla} en stock.`);
-            } else {
-                alert(`Lo sentimos, no tenemos la talla de lencería ${searchedTalla} en stock.`);
-            }
-        }
-    });
-
-    // Evento de clic para restablecer selecciones de lencería
-    restablecerSeleccion.addEventListener("click"), function () {
-        lenceria
     }
-}    
+});
+
+// Agregar un manejador de eventos para restablecer las compras
+restablecerCompraButton.addEventListener("click", function() {
+    comprasRealizadas.length = 0; // Vaciar el arreglo de compras
+    mostrarComprasEnRegistro();
+});
+
+function mostrarComprasEnRegistro() {
+    registroComprasDiv.innerHTML = "Tallas Compradas:<br>";
+    for (const compra of comprasRealizadas) {
+        registroComprasDiv.innerHTML += compra + "<br>";
+    }
+}
